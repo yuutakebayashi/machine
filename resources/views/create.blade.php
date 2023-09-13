@@ -12,123 +12,56 @@
 
 <form action="{{ route("machines.store") }}" method="POST" enctype="multipart/form-data">
 @csrf
-{{-- <div class="row">
-    <div class="col-12 mb-2 mt-2" style="display:flex;">
-    <div  lass="form-group" style="display:flex;">
-        <label for="name">商品名</label>
-            <input type="text" name="name" id="name" class="form-control">
-            @error("name")
-            <span style="color:red;">商品名を20文字以内で入力してください</span>
-            @enderror
-        </div>
-    </div>
-    <div class="col-12 mb-2 mt-2"  style="display:flex;">
-        <div class="form-group"  style="display:flex;">
-            <label for="name">メーカー名</label>
-            <select name="maker" class="form-select">
-
-                <option id="name">メーカー名を選択してください</option>
-                @foreach($makers as $maker)
-                    <option value="{{ $maker->id }}">{{ $maker->str }}</option>
-                @endforeach
-            </select>
-            @error("maker")
-            <span style="color:red;">メーカー名を選択してください</span>
-            @enderror
-        </div>
-    </div>
-    <div class="col-12 mb-2 mt-2" style="display:flex;">
-        <div class="form-group" style="display:flex;">
-            <label for="proce">価格</label>
-            <input type="text" name="price" id="price" class="form-control">
-            @error("price")
-            <span style="color:red;">価格を数値で入力してください</span>
-            @enderror
-        </div>
-    </div>
-    <div class="col-12 mb-2 mt-2" style="display:flex;">
-        <div class="form-group" style="display:flex;">
-            <label for="count">個数</label>
-            <input type="text" name="count" id="count" class="form-control">
-            @error("count")
-            <span style="color:red;">個数を数値で入力してください</span>
-            @enderror
-        </div>
-    </div>
-    <div class="col-12 mb-2 mt-2" style="display:flex;">
-        <div class="form-group" style="display:flex;">
-            <label for="comment">コメント</label>
-            <textarea name="comment" id="comment" class="form-control"></textarea>
-            @error("comment")
-            <span style="color:red;">コメントを200文字以内で入力してください</span>
-            @enderror
-        </div>
-    </div>
-    <div class="col-12 mb-2 mt-2" style="display:flex;">
-        <div class="form-group style="display:flex;">
-            <form method="POST" action="/machines" enctype="multipart/form-data">
-                @csrf
-                <input type="file" name="image">
-            </form>
-            @error("image")
-            <span style="color:red;">画像を入れてください</span>
-            @enderror
-
-
-        </div>
-    </div>
-    <div class="col-12 mb-2 mt-2" style="display:flex;">
-        <button type="submit" class="btn btn-primary w-10">新規登録</button>
-        <a class="btn btn-success" href="{{url("/machines")}}">戻る</a>
-
-    </div>
-</div> --}}
 
 <div style="border:2px solid black;">
     <table style="text-align:center;font-size:24px;margin:20px 20px 0;">
-        <tr><td style="font-weight:bold;padding:20px 300px 20px 20px;">商品名</td><td>
-            <input type="text" name="name" class="form-control">
-            @error("name")
-            <span style="color:red;">商品名を20文字以内で入力してください</span>
-            @enderror</td>
+        <tr><td style="font-weight:bold;padding:20px 300px 20px 20px;">商品名</td>
+            <td>
+            <input type="text" name="name" class="form-control" value="{{ old('name') }}">
+            @if($errors->has('name'))
+                <p>{{ $errors->first('name') }}</p>
+            @endif
             </td>
         </tr>
 
         <tr><td style="font-weight:bold;padding:20px 300px 20px 20px;">メーカー</td>
             <td>
-                <select name="maker" class="form-select">
+                <select name="maker" class="form-select" value="{{ old('maker') }}">
                 <option>メーカー名を選択してください</option>
                 @foreach($makers as $maker)
                 <option value="{{ $maker->id }}">{{ $maker->str }}</option>
                 @endforeach
                 </select>
-            @error("maker")
-            <span style="color:red;">メーカー名を選択してください</span>
-            @enderror
+                @if($errors->has('maker'))
+                    <p>{{ $errors->first('maker') }}</p>
+                @endif
             </td>
         </tr>
 
-        <tr><td style="font-weight:bold;padding:20px 300px 20px 20px;">価格</td><td>
-            <input type="text" name="price" class="form-control">
-            @error("price")
-            <span style="color:red;">価格を数値で入力してください</span>
-            @enderror
+        <tr><td style="font-weight:bold;padding:20px 300px 20px 20px;">価格</td>
+            <td>
+            <input type="text" name="price" class="form-control" value="{{ old('price') }}">
+            @if($errors->has('price'))
+                <p>{{ $errors->first('price') }}</p>
+            @endif
             </td>
         </tr>
 
-        <tr><td style="font-weight:bold;padding:20px 300px 20px 20px;">在庫数</td><td>
-            <input type="text" name="count" class="form-control">
-            @error("count")
-            <span style="color:red;">個数を数値で入力してください</span>
-            @enderror
+        <tr><td style="font-weight:bold;padding:20px 300px 20px 20px;">在庫数</td>
+            <td>
+            <input type="text" name="count" class="form-control" value="{{ old('count') }}">
+            @if($errors->has('count'))
+                <p>{{ $errors->first('count') }}</p>
+            @endif
             </td>
         </tr>
 
-        <tr><td style="font-weight:bold;padding:20px 300px 0 20px;">コメント</td><td>
-            <textarea name="comment" class="form-control"></textarea>
-            @error("comment")
-            <span style="color:red;">コメントを200文字以内で入力してください</span>
-            @enderror
+        <tr><td style="font-weight:bold;padding:20px 300px 0 20px;">コメント</td>
+            <td>
+            <textarea name="comment" class="form-control">{{ old('comment') }}</textarea>
+            @if($errors->has('comment'))
+                <p>{{ $errors->first('comment') }}</p>
+            @endif
             </td>
         </tr>
 
@@ -136,11 +69,11 @@
             <td>
                 <form method="POST" action="/machines" enctype="multipart/form-data">
                     @csrf
-                    <input type="file" name="image">
+                    <input type="file" name="image" value="{{ old('image') }}">
+                    @if($errors->has('image'))
+                        <p>{{ $errors->first('image') }}</p>
+                    @endif
                 </form>
-                @error("image")
-                <span style="color:red;">画像を入れてください</span>
-                @enderror
             </td>
         </tr>
     </table>

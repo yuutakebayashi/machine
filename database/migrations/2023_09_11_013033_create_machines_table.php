@@ -21,8 +21,8 @@ return new class extends Migration
             $table->integer("count");
             $table->text("comment");
             $table->string("image");
+            $table->string("path");
             $table->timestamps();
-
         });
     }
 
