@@ -29,7 +29,6 @@ class MachineRequest extends FormRequest
             "price" => "required|integer",
             "count" => "required|integer",
             "comment" => "required",
-            "image" => "required",
         ];
     }
 

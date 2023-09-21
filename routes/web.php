@@ -29,13 +29,6 @@ Route::get("/machines/show/{machine}","App\Http\Controllers\MachineController@sh
 
 Route::delete("/machines/{machine}","App\Http\Controllers\MachineController@destroy")->name("machines.destroy")->middleware("auth");
 
-Route::post('/machines/edit/{machine}',[App\Http\Controllers\ArticleController::class, 'Submit'])->name('submit');
-Route::post('/machines/edit/{machine}',[App\Http\Controllers\ArticleController::class, 'EditSubmit'])->name('EditSubmit');
-
-
-
-
-
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

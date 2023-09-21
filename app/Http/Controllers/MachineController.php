@@ -6,7 +6,6 @@ use App\Models\machine;
 use App\Models\Maker;
 use Illuminate\Http\Request;
 use App\Http\Requests\MachineRequest;
-use App\Http\Requests\ExeptImageRequest;
 use Illuminate\Support\Facades\DB;
 
 
@@ -79,24 +78,33 @@ class MachineController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MachineRequest $request)
+    public function store(MachineRequest $request, machine $machine)
     {
-
         $dir = "sample";
+        $file = $request->file("image");
+        if(!is_null($file)) {
         $file_name=$request->file("image")->getClientOriginalName();
         $request->file("image")->storeAs("public/" . $dir, $file_name);
 
+        }
 
-        $machine = new Machine;
-        $machine->name = $request->input(["name"]);
-        $machine->maker = $request->input(["maker"]);
-        $machine->price = $request->input(["price"]);
-        $machine->count = $request->input(["count"]);
-        $machine->comment = $request->input(["comment"]);
-        $machine->image = $file_name;
-        $machine->path= "storage/" . $dir . "/" . $file_name;
+        DB::beginTransaction();
 
-        $machine->save();
+        try {
+            $machine->name = $request->input(["name"]);
+            $machine->maker = $request->input(["maker"]);
+            $machine->price = $request->input(["price"]);
+            $machine->count = $request->input(["count"]);
+            $machine->comment = $request->input(["comment"]);
+            if(!is_null($file)){
+                $machine->image = $file_name;
+                $machine->path = "storage/" . $dir . "/" . $file_name;}
+            $machine->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back();
+        }
 
         return redirect()->route("machines.index");
     }
@@ -136,24 +144,34 @@ class MachineController extends Controller
      * @param  \App\Models\machine  $machine
      * @return \Illuminate\Http\Response
      */
-    public function update(ExeptImageRequest $request, machine $machine)
+    public function update(MachineRequest $request, machine $machine)
     {
         $dir = "sample";
         $file = $request->file("image");
         if(!is_null($file)) {
         $file_name=$request->file("image")->getClientOriginalName();
         $request->file("image")->storeAs("public/" . $dir, $file_name);
-        $machine->image = $file_name;
-        $machine->path = "storage/" . $dir . "/" . $file_name;
+
         }
 
-        $machine->name = $request->input(["name"]);
-        $machine->maker = $request->input(["maker"]);
-        $machine->price = $request->input(["price"]);
-        $machine->count = $request->input(["count"]);
-        $machine->comment = $request->input(["comment"]);
+        DB::beginTransaction();
 
-        $machine->save();
+        try {
+
+            $machine->name = $request->input(["name"]);
+            $machine->maker = $request->input(["maker"]);
+            $machine->price = $request->input(["price"]);
+            $machine->count = $request->input(["count"]);
+            $machine->comment = $request->input(["comment"]);
+            if(!is_null($file)){
+                $machine->image = $file_name;
+                $machine->path = "storage/" . $dir . "/" . $file_name;}
+            $machine->save();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back();
+        }
 
         return redirect()->route("machines.index");
     }
@@ -167,36 +185,6 @@ class MachineController extends Controller
     public function destroy(machine $machine)
     {
         $machine->delete();
-        return redirect()->route("machines.index");
-    }
-
-    public function Submit(MachineRequest $request) {
-
-        DB::beginTransaction();
-
-        try {
-            $model = new Machine();
-            $model->store($request);
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            return back();
-        }
-        return redirect()->route("machines.index");
-    }
-
-    public function EditSubmit(ExeptImageRequest $request) {
-
-        DB::beginTransaction();
-
-        try {
-            $model = new Machine();
-            $model->update($request);
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            return back();
-        }
         return redirect()->route("machines.index");
     }
 }

@@ -69,10 +69,7 @@
             <td>
                 <form method="POST" action="/machines" enctype="multipart/form-data">
                     @csrf
-                    <input type="file" name="image" value="{{ old('image') }}">
-                    @if($errors->has('image'))
-                        <p>{{ $errors->first('image') }}</p>
-                    @endif
+                    <input type="file" name="image" >
                 </form>
             </td>
         </tr>

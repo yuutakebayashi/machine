@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string("price");
             $table->integer("count");
             $table->text("comment");
-            $table->string("image");
-            $table->string("path");
+            $table->string("image")->nullable();
+            $table->string("path")->nullable();
             $table->timestamps();
         });
     }
