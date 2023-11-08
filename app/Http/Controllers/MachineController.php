@@ -21,6 +21,10 @@ class MachineController extends Controller
         $query = Machine::query();
         $keyword = $request->input("keyword");
         $makerKeyword = $request->maker;
+        $priceUpper = $request->input("priceUpper");
+        $priceLower = $request->input("priceLower");
+        $countUpper = $request->input("countUpper");
+        $countLower = $request->input("countLower");
 
         $machines=$query->select([
             "b.id",
@@ -38,15 +42,34 @@ class MachineController extends Controller
             $join->on("b.maker", "=", "r.id");
         });
 
+        // キーワードから検索処理
         if(!empty($keyword)) {
             $query->where("name", "like", "%{$keyword}%");
         }
 
         if(!empty($makerKeyword)){
-                $query->where('maker', $makerKeyword);
+                $machines->where('maker', $makerKeyword);
                 };
 
+        // 価格最大値から検索処理
+        if(!empty($priceUpper)) {
+                $machines->where('price', '<=',$priceUpper);
+        }
 
+        //  価格最小値から検索処理
+        if(!empty($priceLower)) {
+                $machines->where('price', '>=',$priceLower);
+        }
+
+        // 在庫最大値から検索処理
+        if(!empty($countUpper)) {
+            $machines->where('count', '<=',$countUpper);
+                }
+
+                //  在庫最小値から検索処理
+        if(!empty($countLower)) {
+            $query->where('count', '>=',$countLower);
+        }
         // $query->orderByAsc("b.id")
         // ->paginate(5);
 
