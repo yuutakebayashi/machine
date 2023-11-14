@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->string("maker");
-            $table->string("price");
+            $table->integer("price");
             $table->integer("count");
             $table->text("comment");
             $table->string("image")->nullable();
