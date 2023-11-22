@@ -108,7 +108,6 @@ class MachineController extends Controller
         if(!is_null($file)) {
         $file_name=$request->file("image")->getClientOriginalName();
         $request->file("image")->storeAs("public/" . $dir, $file_name);
-
         }
 
         DB::beginTransaction();

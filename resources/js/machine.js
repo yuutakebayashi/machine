@@ -1,5 +1,6 @@
 $(document).ready(function () {
     sort();
+    deleteMachine();
 });
 
 function sort() {
@@ -17,7 +18,7 @@ $(function () {
 
         $.ajax({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             url: "machines",
             type: "GET",
@@ -29,6 +30,7 @@ $(function () {
                 let newTable = $(data).find("#machine-table");
                 $("#machine-table").replaceWith(newTable);
                 sort();
+                deleteMachine();
             })
             .fail(function () {
                 alert("失敗...");
@@ -37,36 +39,39 @@ $(function () {
 });
 
 // 削除
-
-$(".delete-btn").on("click", function (e) {
-    e.preventDefault();
-    let deleteConfirm = confirm("削除しますか？");
-
-    if (deleteConfirm == true) {
-        let deleteId = $(this).data("delete-id");
-        console.log(deleteId);
-        let click = $(this);
-
-        $.ajax({
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            url: "machines/" + deleteId,
-            type: "POST",
-            data: {
-                _method: "DELETE",
-            },
-        })
-            .done(function () {
-                console.log("削除！");
-                click.parents("tr").remove();
-
-                $("#machine-table").trigger("update");
-            })
-            .fail(function () {
-                console.log("削除失敗...");
-            });
-    } else {
+function deleteMachine() {
+    $(".delete-btn").on("click", function (e) {
         e.preventDefault();
-    }
-});
+        let deleteConfirm = confirm("削除しますか？");
+
+        if (deleteConfirm == true) {
+            let deleteId = $(this).data("delete-id");
+            console.log(deleteId);
+            let click = $(this);
+
+            $.ajax({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                url: "machines/" + deleteId,
+                type: "POST",
+                data: {
+                    _method: "DELETE",
+                },
+            })
+                .done(function () {
+                    console.log("削除！");
+                    click.parents("tr").remove();
+
+                    $("#machine-table").trigger("update");
+                })
+                .fail(function () {
+                    console.log("削除失敗...");
+                });
+        } else {
+            e.preventDefault();
+        }
+    });
+}
